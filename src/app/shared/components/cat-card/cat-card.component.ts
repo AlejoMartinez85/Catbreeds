@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, signal } from '@angular/core';
+import { Component, effect, Input, OnInit, signal } from '@angular/core';
 import { Cat } from '../../interfaces/cat.interface';
 import { CatService } from '../../services/cat.service';
 import { Router } from '@angular/router';
@@ -18,6 +18,7 @@ export class CatCardComponent {
    * variable for save the current cat data
    */
   cat = signal<Cat | null>(null);
+  catCountryFlagCode: string = '';
   /**
    * Input for set cat data
    */
@@ -26,7 +27,15 @@ export class CatCardComponent {
   }
   constructor(
     private catService: CatService,
-    private router: Router) { }
+    private router: Router) {
+
+    effect(() => {
+      const currentCat = this.cat();
+        if (currentCat && currentCat.id !== '') {
+          this.catCountryFlagCode = `fi fi-${currentCat.country_code.toLowerCase()}`;
+        }
+      });
+    }
 
   /**
    *
@@ -39,7 +48,7 @@ export class CatCardComponent {
      * navigate logic
      */
     this.router.navigateByUrl(`${BASES_ROUTE.DETAIL}/${cat.id}`);
-
   }
+
 
 }

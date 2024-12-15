@@ -15,11 +15,14 @@
   <!-- Sección con dos columnas de 50% cada una -->
   <div class="two-column-section">
     <div class="column">
-      <h3>País de origen</h3>
-      <p>{{cat()?.origin}}</p>
+      <h3 class="card-subtitle">País de origen</h3>
+      <div class="country-data-container">
+        <p>{{cat()?.origin}}</p>
+        <span [class]="catCountryFlagCode"></span>
+      </div>
     </div>
     <div class="column">
-      <h3>Inteligencia</h3>
+      <h3 class="card-subtitle">Inteligencia</h3>
       <p>{{cat()?.intelligence}}</p>
     </div>
   </div>
