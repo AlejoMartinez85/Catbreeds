@@ -6,6 +6,7 @@ import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import { CatCardComponent } from '../shared/components/cat-card/cat-card.component';
+import { InputSearchComponent } from '../shared/components/input-search/input-search.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { CatCardComponent } from '../shared/components/cat-card/cat-card.compone
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    CatCardComponent
+    CatCardComponent,
+    InputSearchComponent
   ],
   declarations: [HomePage],
 })

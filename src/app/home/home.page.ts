@@ -62,6 +62,7 @@ export class HomePage implements OnInit, OnDestroy {
       if (response.length > 0) {
         this.currentCatPage ++;
         this.catList.update(currentData => [...currentData, ...response]);
+        this.catListBakcup.set(this.catList());
         console.log('catList data: ', this.catList());
         console.log('this.currentCatPage: ', this.currentCatPage);
       } else {
@@ -85,6 +86,23 @@ export class HomePage implements OnInit, OnDestroy {
       console.log('event infinite scroll: ', event);
     } else {
       event.target.complete();
+    }
+  }
+
+  searchQuery(event: any): void {
+    console.log('event in home component: ', event);
+    if (event === '') {
+      /**
+       * cuando es vacio eso quiere decir que debemos de traer todo de nuevo
+       */
+      this.catList.set(this.catListBakcup());
+    } else {
+      /**
+       * vamos a filtrar con lo que trajo haber que se encuentra
+       */
+      const filter = this.catList().filter((cat) => cat.name.toLowerCase().indexOf(event) > -1);
+      this.catList.set(filter);
+      console.log('filter: ', filter);
     }
   }
 

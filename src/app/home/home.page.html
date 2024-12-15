@@ -6,7 +6,7 @@
     </ion-title>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-searchbar show-clear-button="focus" value=""  animated="true" placeholder="Buscar por raza"></ion-searchbar>
+    <app-input-search (search)="searchQuery($event)"></app-input-search>
   </ion-toolbar>
 </ion-header>
 <!-- ------------------- -->
@@ -16,21 +16,35 @@
   color="secondary"
   (ionScroll)="onScroll($event)"
   [scrollEvents]="true">
-  @for(cat of catList(); track cat; let idx = $index) {
-    <!-- cat card component -->
-    <app-cat-card [setCat]="cat"></app-cat-card>
-  }
-  @if(showScrollButton){
-    <ion-fab  horizontal="end" vertical="bottom" slot="fixed">
-      <ion-fab-button color="secondary" size="small" (click)="scrollUp()">
-        <ion-icon name="chevron-up-outline"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
-  }
-  @if(hasMoreData) {
-    <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
-      <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
-    </ion-infinite-scroll>
+  @if(catList().length > 0) {
+    @for(cat of catList(); track cat; let idx = $index) {
+      <!-- cat card component -->
+      <app-cat-card [setCat]="cat"></app-cat-card>
+    }
+    @if(showScrollButton){
+      <ion-fab  horizontal="end" vertical="bottom" slot="fixed">
+        <ion-fab-button color="secondary" size="small" (click)="scrollUp()">
+          <ion-icon name="chevron-up-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    }
+    @if(hasMoreData) {
+      <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+        <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    }
+  } @else {
+    <ion-card class="feedback-container" color="light">
+      <div class="icon-content">
+        <ion-icon size="large" name="warning-outline"></ion-icon>
+      </div>
+      <ion-card-header>
+        <ion-card-title>No se ha encontrado resultados</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        La raza que intentas buscar no se encuentra disponble, por favor intenta con otra!
+      </ion-card-content>
+    </ion-card>
   }
   <!-- ----------------- -->
 </ion-content>
