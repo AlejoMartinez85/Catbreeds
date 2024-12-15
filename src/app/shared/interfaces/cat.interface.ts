@@ -50,3 +50,11 @@ export interface Cat {
   reference_image_id: string;
   image: Image;
 }
+
+export interface CatById {
+  breeds: Cat[];
+  id: string;
+  url: string;
+  width: number;
+  height: number;
+}

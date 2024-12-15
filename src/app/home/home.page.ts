@@ -10,11 +10,17 @@ import { BASES_ROUTE } from '../shared/constants/constants';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
+  /**
+   * variables
+   */
   catList = signal<Cat[]>([]);
   catListBakcup = signal<Cat[]>([]);
+  /**
+   *
+   * @param catService
+   */
   constructor(
-    private catService: CatService,
-    private router: Router
+    private catService: CatService
   ) {}
 
   ngOnInit(): void {
@@ -28,22 +34,6 @@ export class HomePage implements OnInit {
       this.catList.set(response);
       console.log('catList data: ', this.catList());
     });
-  }
-  /**
-   *
-   * @param cat
-   */
-  selectCat(cat: Cat): void {
-    console.log('current cat Selected: ', cat);
-    this.catService.setCurrentCat = cat;
-    /**
-     * navigate logic
-     */
-    this.router.navigateByUrl(`${BASES_ROUTE.DETAIL}/${cat.id}`);
-    this.router.navigate([
-
-    ])
-
   }
 
 }

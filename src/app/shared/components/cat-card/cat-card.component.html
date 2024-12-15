@@ -1,0 +1,26 @@
+<!-- card.component.html -->
+<ion-card color="light" (click)="selectCat(cat())">
+  <!-- Header con título e ícono -->
+  <ion-card-header>
+    <div class="card-header-container">
+      <h2 class="card-title">{{cat()?.name}}</h2>
+    </div>
+  </ion-card-header>
+
+  <!-- Imagen a full width -->
+  <div class="image-container">
+    <img [src]="cat()?.image?.url" alt="Imagen descriptiva">
+  </div>
+
+  <!-- Sección con dos columnas de 50% cada una -->
+  <div class="two-column-section">
+    <div class="column">
+      <h3>País de origen</h3>
+      <p>{{cat()?.origin}}</p>
+    </div>
+    <div class="column">
+      <h3>Inteligencia</h3>
+      <p>{{cat()?.intelligence}}</p>
+    </div>
+  </div>
+</ion-card>

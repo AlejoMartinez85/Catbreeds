@@ -6,38 +6,15 @@
     </ion-title>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-searchbar show-clear-button="focus" value="Show on Focus"  animated="true" placeholder="Animated"></ion-searchbar>
+    <ion-searchbar show-clear-button="focus" value=""  animated="true" placeholder="Buscar por raza"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 <!-- ------------------- -->
 <ion-content [fullscreen]="true" color="secondary">
   <div class="cat-list-container">
     @for(cat of catList(); track cat; let idx = $index) {
-      <!-- cat card -->
-      <!-- card.component.html -->
-      <ion-card color="primary" (click)="selectCat(cat)">
-        <!-- Header con título e ícono -->
-        <ion-card-header>
-          <div class="card-header-container">
-            <h2 class="card-title">{{cat.name}}</h2>
-          </div>
-        </ion-card-header>
-
-        <!-- Imagen a full width -->
-        <div class="image-container">
-          <img [src]="cat?.image?.url" alt="Imagen descriptiva">
-        </div>
-
-        <!-- Sección con dos columnas de 50% cada una -->
-        <div class="two-column-section">
-          <div class="column">
-            <p>{{cat.origin}}</p>
-          </div>
-          <div class="column">
-            <p>Inteligencia: {{cat.intelligence}}</p>
-          </div>
-        </div>
-      </ion-card>
+      <!-- cat card component -->
+      <app-cat-card [setCat]="cat"></app-cat-card>
     }
   </div>
   <!-- ----------------- -->

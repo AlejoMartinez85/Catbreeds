@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CatService } from '../shared/services/cat.service';
-import { Cat } from '../shared/interfaces/cat.interface';
+import { Cat, CatById } from '../shared/interfaces/cat.interface';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -83,8 +83,11 @@ export class DetailComponent  implements OnInit {
   }
 
   getCatById(catId: string): void {
-    this.catService.getCatListById(catId).subscribe((response: Cat) => {
+    this.catService.getCatListById(catId).subscribe((response: CatById[]) => {
       console.log('cat by id: ', response);
+      this.cat.set(response[0].breeds[0]);
+      console.log('currentCat: ', this.cat());
+
     })
   }
 
