@@ -1,0 +1,7 @@
+{
+  "name": "catApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
