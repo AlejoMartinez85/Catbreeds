@@ -51,6 +51,11 @@ export interface Cat {
   image: Image;
 }
 
+export interface CurrentCatListData {
+  catList: Cat[],
+  page: number
+}
+
 export interface CatById {
   breeds: Cat[];
   id: string;
