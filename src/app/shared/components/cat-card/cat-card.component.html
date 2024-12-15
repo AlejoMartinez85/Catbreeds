@@ -23,7 +23,12 @@
     </div>
     <div class="column">
       <h3 class="card-subtitle">Inteligencia</h3>
-      <span>{{cat()?.intelligence}}</span>
+      <div class="intelligence-rating-container">
+        <ng-container *ngFor="let star of [1,2,3,4,5]">
+          <ion-icon [name]="star <= catIntelligence ? 'ellipse' : 'ellipse-outline'" [ngStyle]="{'font-size': '1rem'}">
+          </ion-icon>
+        </ng-container>
+      </div>
     </div>
   </div>
 </ion-card>

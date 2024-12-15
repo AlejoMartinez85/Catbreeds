@@ -6,13 +6,14 @@ import { IonHeader } from "@ionic/angular/standalone";
 import { IonicModule } from '@ionic/angular';
 import { HomePage } from '../home/home.page';
 import { ExternalLinkService } from '../shared/services/external-link.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss'],
   standalone: true,
-  imports: [IonicModule]
+  imports: [IonicModule, CommonModule]
 })
 export class DetailComponent  implements OnInit, OnDestroy {
   cat = signal<Cat>({
@@ -67,6 +68,7 @@ export class DetailComponent  implements OnInit, OnDestroy {
   homePath: string = '/home';
   catUrl: string = '';
   catCountryFlagCode: string = '';
+  catIntelligence: number = 0;
   constructor(
     private catService: CatService,
     private route: ActivatedRoute,
@@ -81,7 +83,9 @@ export class DetailComponent  implements OnInit, OnDestroy {
     const getCurrentCatData: Cat = this.catService.getCurrentCat;
     if (getCurrentCatData.id !== '') {
       this.cat.set(getCurrentCatData);
+      this.catUrl = this.cat().image.url;
       this.setCurrentCatOriginFlag(this.cat().country_code);
+      this.catIntelligence = this.cat().intelligence;
     } else {
       this.route.params.subscribe((response: any) => {
         console.log('response: ', response);
@@ -97,6 +101,7 @@ export class DetailComponent  implements OnInit, OnDestroy {
       console.log('cat by id: ', response);
       this.cat.set(response[0].breeds[0]);
       this.catUrl = response[0].url;
+      this.catIntelligence = this.cat().intelligence;
       this.setCurrentCatOriginFlag(this.cat().country_code);
       console.log('currentCat: ', this.cat());
 

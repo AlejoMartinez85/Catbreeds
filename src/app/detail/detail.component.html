@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="homePath" text="Volver"></ion-back-button>
     </ion-buttons>
-    <ion-title class="main-title">{{cat().name}}</ion-title>
+    <ion-title>{{cat().name}}</ion-title>
   </ion-toolbar>
 </ion-header>
 <!-- content for all cat information -->
@@ -32,7 +32,14 @@
           </ion-col>
           <ion-col class="info-item">
             <h3 class="item-title">Inteligencia</h3>
-            <span>{{cat().intelligence}}</span>
+            <div class="intelligence-rating-container">
+              <ng-container *ngFor="let star of [1,2,3,4,5]">
+                <ion-icon
+                  [name]="star <= catIntelligence ? 'ellipse' : 'ellipse-outline'"
+                  [ngStyle]="{'font-size': '1rem'}">
+                </ion-icon>
+              </ng-container>
+            </div>
           </ion-col>
         </ion-row>
 
