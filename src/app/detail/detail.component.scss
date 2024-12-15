@@ -1,0 +1,66 @@
+
+ion-header {
+  padding: 1rem;
+}
+
+.cat-detail-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.cat-image-container {
+  flex-shrink: 0;
+  /* Evita que la imagen se reduzca */
+  height: 21.875rem;
+  /* Altura fija */
+  overflow: hidden;
+}
+
+.cat-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 4/3;
+}
+
+.scrollable-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  /* Hace scroll solo en este contenedor */
+  padding: 1rem;
+}
+
+.item-container {
+  margin-bottom: 1rem;
+}
+
+.info-item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  justify-content: space-between;
+
+}
+
+.country-data-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.main-title {
+  font-size: clamp(2rem, 1.5vw, 2.25rem);
+}
+
+.section-title {
+  font-size: clamp(1.5rem, 1.5vw, 2rem);
+  margin: 0;
+}
+
+.item-title {
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
+  margin: 0;
+}

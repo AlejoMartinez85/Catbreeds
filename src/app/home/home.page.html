@@ -1,20 +1,21 @@
+<!-- volver component -->
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      Catbreeds
     </ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar show-clear-button="focus" value=""  animated="true" placeholder="Buscar por raza"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+<!-- ------------------- -->
+<ion-content [fullscreen]="true" color="secondary">
+  <div class="cat-list-container">
+    @for(cat of catList(); track cat; let idx = $index) {
+      <!-- cat card component -->
+      <app-cat-card [setCat]="cat"></app-cat-card>
+    }
   </div>
+  <!-- ----------------- -->
 </ion-content>
