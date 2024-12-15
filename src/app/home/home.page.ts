@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { CatService } from '../shared/services/cat.service';
 import { Cat, CurrentCatListData } from '../shared/interfaces/cat.interface';
 import { Router } from '@angular/router';
 import { BASES_ROUTE } from '../shared/constants/constants';
 import { InfiniteScrollCustomEvent } from '@ionic/core';
+import { IonContent } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -12,12 +13,22 @@ import { InfiniteScrollCustomEvent } from '@ionic/core';
 })
 export class HomePage implements OnInit, OnDestroy {
   /**
-   * variables
+   * variables for save cat list information
    */
   catList = signal<Cat[]>([]);
   catListBakcup = signal<Cat[]>([]);
+  /**
+   * variables for do pagination
+   */
   currentCatPage: number = 0;
   hasMoreData: boolean = true;
+  /**
+   * variable for show and hide button scroll up
+   */
+  showScrollButton: boolean = false;
+  scrollPercentage: number = 70;
+
+  @ViewChild(IonContent, { static: true }) mainContent: IonContent | undefined
   /**
    *
    * @param catService
@@ -56,7 +67,9 @@ export class HomePage implements OnInit, OnDestroy {
       } else {
         this.hasMoreData = false;
       }
-
+      /**
+       * for manage the current infinite scroll state
+       */
       if (event) {
         event.target.complete();
       }
@@ -73,6 +86,35 @@ export class HomePage implements OnInit, OnDestroy {
     } else {
       event.target.complete();
     }
+  }
+
+  /**
+   * Called on scroll events
+   */
+  onScroll(event: any): void {
+    /**
+     *  ------ calculate scroll percentage ----------
+     */
+    /**
+     * main scroll event
+     */
+    const scrollElement = event.target;
+    /**
+     * space that can be moved
+     * scrollHeight == all content height
+     * clientHeight == visible height
+     * scrollTop == how much it was moved
+     */
+    const scrollHeight = scrollElement.scrollHeight - scrollElement.clientHeight;
+    this.scrollPercentage = (event.detail.scrollTop / scrollHeight) * 100;
+    /**
+     * show or hide the button scroll up depending the percentage
+     */
+    this.showScrollButton = this.scrollPercentage >= this.scrollPercentage;
+  }
+
+  scrollUp(): void {
+    this.mainContent?.scrollToTop(400);
   }
 
   ngOnDestroy(): void {

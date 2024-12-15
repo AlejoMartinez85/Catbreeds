@@ -10,13 +10,23 @@
   </ion-toolbar>
 </ion-header>
 <!-- ------------------- -->
-<ion-content [fullscreen]="true" color="secondary">
-  <div class="cat-list-container">
-    @for(cat of catList(); track cat; let idx = $index) {
-      <!-- cat card component -->
-      <app-cat-card [setCat]="cat"></app-cat-card>
-    }
-  </div>
+<ion-content
+  class="cat-list-container"
+  [fullscreen]="true"
+  color="secondary"
+  (ionScroll)="onScroll($event)"
+  [scrollEvents]="true">
+  @for(cat of catList(); track cat; let idx = $index) {
+    <!-- cat card component -->
+    <app-cat-card [setCat]="cat"></app-cat-card>
+  }
+  @if(showScrollButton){
+    <ion-fab  horizontal="end" vertical="bottom" slot="fixed">
+      <ion-fab-button color="secondary" size="small" (click)="scrollUp()">
+        <ion-icon name="chevron-up-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  }
   @if(hasMoreData) {
     <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
       <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
