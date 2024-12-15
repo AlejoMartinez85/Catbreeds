@@ -9,7 +9,7 @@
 
   <!-- Imagen a full width -->
   <div class="image-container">
-    <img [src]="cat()?.image?.url" alt="Imagen descriptiva">
+    <ion-img [src]="cat()?.image?.url" alt="Imagen descriptiva"></ion-img>
   </div>
 
   <!-- Sección con dos columnas de 50% cada una -->
@@ -17,13 +17,13 @@
     <div class="column">
       <h3 class="card-subtitle">País de origen</h3>
       <div class="country-data-container">
-        <p>{{cat()?.origin}}</p>
+        <span>{{cat()?.origin}}</span>
         <span [class]="catCountryFlagCode"></span>
       </div>
     </div>
     <div class="column">
       <h3 class="card-subtitle">Inteligencia</h3>
-      <p>{{cat()?.intelligence}}</p>
+      <span>{{cat()?.intelligence}}</span>
     </div>
   </div>
 </ion-card>

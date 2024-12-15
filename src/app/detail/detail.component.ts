@@ -1,15 +1,20 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { CatService } from '../shared/services/cat.service';
 import { Cat, CatById } from '../shared/interfaces/cat.interface';
 import { ActivatedRoute } from '@angular/router';
+import { IonHeader } from "@ionic/angular/standalone";
+import { IonicModule } from '@ionic/angular';
+import { HomePage } from '../home/home.page';
+import { ExternalLinkService } from '../shared/services/external-link.service';
 
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss'],
   standalone: true,
+  imports: [IonicModule]
 })
-export class DetailComponent  implements OnInit {
+export class DetailComponent  implements OnInit, OnDestroy {
   cat = signal<Cat>({
     weight: {
       imperial: '',
@@ -58,9 +63,14 @@ export class DetailComponent  implements OnInit {
       url: ''
     }
   });
+  component = HomePage;
+  homePath: string = '/home';
+  catUrl: string = '';
+  catCountryFlagCode: string = '';
   constructor(
     private catService: CatService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private externalLinkService: ExternalLinkService
   ) { }
 
   ngOnInit() {
@@ -71,6 +81,7 @@ export class DetailComponent  implements OnInit {
     const getCurrentCatData: Cat = this.catService.getCurrentCat;
     if (getCurrentCatData.id !== '') {
       this.cat.set(getCurrentCatData);
+      this.setCurrentCatOriginFlag(this.cat().country_code);
     } else {
       this.route.params.subscribe((response: any) => {
         console.log('response: ', response);
@@ -78,7 +89,6 @@ export class DetailComponent  implements OnInit {
           this.getCatById(response.id);
         }
       })
-      // this.getCatById();
     }
   }
 
@@ -86,9 +96,29 @@ export class DetailComponent  implements OnInit {
     this.catService.getCatListById(catId).subscribe((response: CatById[]) => {
       console.log('cat by id: ', response);
       this.cat.set(response[0].breeds[0]);
+      this.catUrl = response[0].url;
+      this.setCurrentCatOriginFlag(this.cat().country_code);
       console.log('currentCat: ', this.cat());
 
     })
+  }
+  /**
+   *
+   * @param countryCode
+   */
+  setCurrentCatOriginFlag(countryCode: string): void {
+    this.catCountryFlagCode = `fi fi-${countryCode.toLowerCase()}`;
+  }
+  /**
+   *
+   * @param link
+   */
+  openExternalLink(link:string): void {
+    this.externalLinkService.openExternalLink(link);
+  }
+
+  ngOnDestroy(): void {
+    this.catService.resetCatSelected();
   }
 
 }

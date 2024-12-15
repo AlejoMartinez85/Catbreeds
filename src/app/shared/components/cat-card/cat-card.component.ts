@@ -47,7 +47,7 @@ export class CatCardComponent {
     /**
      * navigate logic
      */
-    this.router.navigateByUrl(`${BASES_ROUTE.DETAIL}/${cat.id}`);
+    this.router.navigate([`${BASES_ROUTE.DETAIL}`, cat.id]);
   }
 
 
