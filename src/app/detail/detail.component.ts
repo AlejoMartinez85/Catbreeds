@@ -2,9 +2,7 @@ import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { CatService } from '../shared/services/cat.service';
 import { Cat, CatById } from '../shared/interfaces/cat.interface';
 import { ActivatedRoute } from '@angular/router';
-import { IonHeader } from "@ionic/angular/standalone";
 import { IonicModule } from '@ionic/angular';
-import { HomePage } from '../home/home.page';
 import { ExternalLinkService } from '../shared/services/external-link.service';
 import { CommonModule } from '@angular/common';
 import { RatingComponent } from '../shared/components/rating/rating.component';
@@ -65,11 +63,13 @@ export class DetailComponent  implements OnInit, OnDestroy {
       url: ''
     }
   });
-  component = HomePage;
   homePath: string = '/home';
   catUrl: string = '';
   catCountryFlagCode: string = '';
-  catIntelligence: number = 0;
+  /**
+   * variable for show and hide skeleton screen
+   */
+  isLoadingSK = signal<boolean>(true);
   constructor(
     private catService: CatService,
     private route: ActivatedRoute,
@@ -79,14 +79,16 @@ export class DetailComponent  implements OnInit, OnDestroy {
   ngOnInit() {
     this.validateExistingData();
   }
-
+  /**
+   *
+   */
   validateExistingData(): void {
     const getCurrentCatData: Cat = this.catService.getCurrentCat;
     if (getCurrentCatData.id !== '') {
       this.cat.set(getCurrentCatData);
       this.catUrl = this.cat().image.url;
       this.setCurrentCatOriginFlag(this.cat().country_code);
-      this.catIntelligence = this.cat().intelligence;
+      this.isLoadingSK.set(false);
     } else {
       this.route.params.subscribe((response: any) => {
         console.log('response: ', response);
@@ -96,16 +98,16 @@ export class DetailComponent  implements OnInit, OnDestroy {
       })
     }
   }
-
+  /**
+   *
+   * @param catId
+   */
   getCatById(catId: string): void {
     this.catService.getCatListById(catId).subscribe((response: CatById[]) => {
-      console.log('cat by id: ', response);
       this.cat.set(response[0].breeds[0]);
       this.catUrl = response[0].url;
-      this.catIntelligence = this.cat().intelligence;
       this.setCurrentCatOriginFlag(this.cat().country_code);
-      console.log('currentCat: ', this.cat());
-
+      this.isLoadingSK.set(false);
     })
   }
   /**

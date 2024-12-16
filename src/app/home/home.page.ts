@@ -27,6 +27,11 @@ export class HomePage implements OnInit, OnDestroy {
    */
   showScrollButton: boolean = false;
   scrollPercentage: number = 70;
+  /**
+   * variable for show and hide skeleton screen
+   */
+  isLoadingSK = signal<boolean>(true);
+  skeletonList = signal<any[]>([{}, {}]);
 
   @ViewChild(IonContent, { static: true }) mainContent: IonContent | undefined
   /**
@@ -45,12 +50,12 @@ export class HomePage implements OnInit, OnDestroy {
    */
   validateExistingData(): void {
     const currentCatList: CurrentCatListData = this.catService.listCat;
-    console.log('currentCatList: ', currentCatList);
     if (currentCatList.catList.length > 0) {
       this.catList.set(currentCatList.catList);
       this.catListBakcup.set(currentCatList.catList);
       this.currentCatPage = currentCatList.page;
     } else {
+      this.isLoadingSK.set(true);
       this.getInitialCatList();
     }
   }
@@ -70,10 +75,11 @@ export class HomePage implements OnInit, OnDestroy {
       }
       /**
        * for manage the current infinite scroll state
-       */
-      if (event) {
-        event.target.complete();
+      */
+     if (event) {
+       event.target.complete();
       }
+      this.isLoadingSK.set(false);
     });
   }
   /**
@@ -90,6 +96,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   searchQuery(event: any): void {
+    this.isLoadingSK.set(true);
     console.log('event in home component: ', event);
     if (event === '') {
       /**
@@ -109,6 +116,7 @@ export class HomePage implements OnInit, OnDestroy {
       }
       console.log('filter: ', filter);
     }
+    this.isLoadingSK.set(false);
   }
 
   /**
