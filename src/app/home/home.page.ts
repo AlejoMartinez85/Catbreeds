@@ -127,28 +127,50 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   /**
+   *
+   * @param event
+   */
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      this.isLoadingSK.set(true);
+      // Any calls to load data go here
+      this.catService.getCatList(0).subscribe((response:Cat[]) => {
+        if (response.length > 0) {
+          this.currentCatPage++;
+          this.catList.update(currentData => [...currentData, ...response]);
+          this.catListBakcup.set(this.catList());
+        }
+        this.isLoadingSK.set(false);
+        event.target.complete();
+      })
+    }, 1000);
+  }
+
+  /**
    * Called on scroll events
    */
-  onScroll(event: any): void {
+  async onScroll(event: any): Promise<void> {
     /**
      *  ------ calculate scroll percentage ----------
      */
     /**
      * main scroll event
      */
-    const scrollElement = event.target;
+    const mainContent = event.target;
+    const scrollElement = await mainContent.getScrollElement();
     /**
-     * space that can be moved
-     * scrollHeight == all content height
-     * clientHeight == visible height
-     * scrollTop == how much it was moved
+     *  totalHeigh == total height of container
+     *  currentScroll == current total height of scroll
+     * viewportHeight == viewport height
      */
-    const scrollHeight = scrollElement.scrollHeight - scrollElement.clientHeight;
-    this.scrollPercentage = (event.detail.scrollTop / scrollHeight) * 100;
+    const totalHeight = scrollElement.scrollHeight;
+    const currentScroll = scrollElement.scrollTop;
+    const viewportHeight = mainContent.offsetHeight;
     /**
-     * show or hide the button scroll up depending the percentage
+     * Calculate the scroll percentage
      */
-    this.showScrollButton = this.scrollPercentage >= this.scrollPercentage;
+    const scrollPercentage = (currentScroll / (totalHeight - viewportHeight)) * 100;
+    this.showScrollButton = scrollPercentage >= 70;
   }
 
   scrollUp(): void {

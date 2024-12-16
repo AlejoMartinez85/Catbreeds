@@ -124,6 +124,18 @@ export class DetailComponent  implements OnInit, OnDestroy {
   openExternalLink(link:string): void {
     this.externalLinkService.openExternalLink(link);
   }
+  /**
+   *
+   * @param event
+   */
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      this.isLoadingSK.set(true);
+      // Any calls to load data go here
+      this.getCatById(this.cat().id);
+      event.target.complete();
+    }, 1000);
+  }
 
   ngOnDestroy(): void {
     this.catService.resetCatSelected();

@@ -12,12 +12,16 @@
 <!-- ------------------- -->
 <ion-content
   class="cat-list-container"
+  fixed-slot-placement="before"
   [fullscreen]="true"
   color="medium"
   (ionScroll)="onScroll($event)"
   [scrollEvents]="true">
   @if(!isLoadingSK()) {
     @if(catList().length > 0) {
+      <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
       @for(cat of catList(); track cat; let idx = $index) {
         <!-- cat card component -->
         <app-cat-card [setCat]="cat"></app-cat-card>
