@@ -1,5 +1,5 @@
 
-ion-header {
+.toolbar-container{
   padding: 1rem;
 }
 
@@ -51,10 +51,6 @@ ion-header {
   gap: 1rem;
 }
 
-.main-title {
-  font-size: clamp(2rem, 1.5vw, 2.25rem);
-}
-
 .section-title {
   font-size: clamp(1.5rem, 1.5vw, 2rem);
   margin: 0;
@@ -64,3 +60,6 @@ ion-header {
   font-size: clamp(1rem, 1.5vw, 1.5rem);
   margin: 0;
 }
+
+
+

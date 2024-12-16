@@ -19,6 +19,7 @@ export class CatCardComponent {
    */
   cat = signal<Cat | null>(null);
   catCountryFlagCode: string = '';
+  catIntelligence: number | any  = 0;
   /**
    * Input for set cat data
    */
@@ -33,6 +34,7 @@ export class CatCardComponent {
       const currentCat = this.cat();
         if (currentCat && currentCat.id !== '') {
           this.catCountryFlagCode = `fi fi-${currentCat.country_code.toLowerCase()}`;
+          this.catIntelligence = this.cat()?.intelligence;
         }
       });
     }

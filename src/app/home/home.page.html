@@ -6,16 +6,83 @@
     </ion-title>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-searchbar show-clear-button="focus" value=""  animated="true" placeholder="Buscar por raza"></ion-searchbar>
+    <app-input-search (search)="searchQuery($event)"></app-input-search>
   </ion-toolbar>
 </ion-header>
 <!-- ------------------- -->
-<ion-content [fullscreen]="true" color="secondary">
-  <div class="cat-list-container">
-    @for(cat of catList(); track cat; let idx = $index) {
-      <!-- cat card component -->
-      <app-cat-card [setCat]="cat"></app-cat-card>
+<ion-content
+  class="cat-list-container"
+  fixed-slot-placement="before"
+  [fullscreen]="true"
+  color="medium"
+  (ionScroll)="onScroll($event)"
+  [scrollEvents]="true">
+  @if(!isLoadingSK()) {
+    @if(catList().length > 0) {
+      <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
+      @for(cat of catList(); track cat; let idx = $index) {
+        <!-- cat card component -->
+        <app-cat-card [setCat]="cat"></app-cat-card>
+      }
+      @if(showScrollButton){
+        <ion-fab  horizontal="end" vertical="bottom" slot="fixed">
+          <ion-fab-button color="secondary" size="small" (click)="scrollUp()">
+            <ion-icon name="chevron-up-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+      }
+      @if(hasMoreData) {
+        <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+          <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      }
+    } @else {
+      <ion-card class="feedback-container" color="light">
+        <div class="icon-content">
+          <ion-icon size="large" name="warning-outline"></ion-icon>
+        </div>
+        <ion-card-header>
+          <ion-card-title>No se ha encontrado resultados</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          La raza que intentas buscar no se encuentra disponble, por favor intenta con otra!
+        </ion-card-content>
+      </ion-card>
     }
-  </div>
-  <!-- ----------------- -->
+  } @else {
+    <!-- skeleton screen layout -->
+     @for(card of skeletonList(); track card; let idx = $index) {
+      <ion-card class="skeleton-screen-card-content" color="light">
+        <!-- Header con título e ícono en skeleton -->
+        <ion-card-header>
+          <ion-skeleton-text animated [style.height.px]="30" [style.width.%]="100"></ion-skeleton-text>
+        </ion-card-header>
+
+        <!-- Imagen en skeleton -->
+        <div class="image-container">
+          <ion-skeleton-text animated [style.height.px]="250" class="w-full"></ion-skeleton-text>
+        </div>
+
+        <!-- Sección con dos columnas de 50% cada una en skeleton -->
+         <ion-row>
+          <ion-col size="6">
+            <ion-skeleton-text animated [style.width.%]="100"></ion-skeleton-text>
+          </ion-col>
+          <ion-col size="6">
+            <ion-skeleton-text animated [style.width.%]="100"></ion-skeleton-text>
+          </ion-col>
+         </ion-row>
+         <ion-row>
+          <ion-col size="6">
+            <ion-skeleton-text [style.height.px]="20" animated [style.width.%]="100"></ion-skeleton-text>
+          </ion-col>
+          <ion-col size="6">
+            <ion-skeleton-text [style.height.px]="20" animated [style.width.%]="100"></ion-skeleton-text>
+          </ion-col>
+         </ion-row>
+      </ion-card>
+     }
+  }
 </ion-content>

@@ -1,0 +1,11 @@
+<div class="rating-container" [id]="'click'+propertyLabel()">
+  <ng-container *ngFor="let bullet of [1,2,3,4,5]">
+    <ion-icon [name]="bullet <= ratingValue() ? 'ellipse' : 'ellipse-outline'" [ngStyle]="{'font-size': '1rem'}">
+    </ion-icon>
+  </ng-container>
+  <ion-popover [trigger]="'click'+propertyLabel()" triggerAction="click">
+    <ng-template>
+      <ion-content class="ion-padding">Esta es la representación gráfica para valores del gato que estan en un rango de 0 a 5</ion-content>
+    </ng-template>
+  </ion-popover>
+</div>
