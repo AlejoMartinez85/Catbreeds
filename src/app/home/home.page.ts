@@ -1,15 +1,24 @@
 import { Component, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { CatService } from '../shared/services/cat.service';
 import { Cat, CurrentCatListData } from '../shared/interfaces/cat.interface';
-import { Router } from '@angular/router';
-import { BASES_ROUTE } from '../shared/constants/constants';
-import { InfiniteScrollCustomEvent } from '@ionic/core';
-import { IonContent } from '@ionic/angular';
+import { IonContent, IonicModule } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { CatCardComponent } from '../shared/components/cat-card/cat-card.component';
+import { InputSearchComponent } from '../shared/components/input-search/input-search.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    CatCardComponent,
+    InputSearchComponent
+  ]
 })
 export class HomePage implements OnInit, OnDestroy {
   /**
@@ -89,7 +98,6 @@ export class HomePage implements OnInit, OnDestroy {
   onIonInfinite(event: any): void {
     if (this.hasMoreData) {
       this.getInitialCatList(event);
-      console.log('event infinite scroll: ', event);
     } else {
       event.target.complete();
     }
@@ -114,7 +122,6 @@ export class HomePage implements OnInit, OnDestroy {
          * procedemos a buscar en base de datos
          */
       }
-      console.log('filter: ', filter);
     }
     this.isLoadingSK.set(false);
   }

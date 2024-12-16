@@ -1,6 +1,6 @@
 <!-- volver component -->
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header color="light" [translucent]="true">
+  <ion-toolbar color="light">
     <ion-title>
       Catbreeds
     </ion-title>
@@ -13,7 +13,7 @@
 <ion-content
   class="cat-list-container"
   [fullscreen]="true"
-  color="secondary"
+  color="medium"
   (ionScroll)="onScroll($event)"
   [scrollEvents]="true">
   @if(!isLoadingSK()) {
