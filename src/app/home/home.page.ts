@@ -137,7 +137,7 @@ export class HomePage implements OnInit, OnDestroy {
       this.catService.getCatList(0).subscribe((response:Cat[]) => {
         if (response.length > 0) {
           this.currentCatPage++;
-          this.catList.update(currentData => [...currentData, ...response]);
+          this.catList.set(response);
           this.catListBakcup.set(this.catList());
         }
         this.isLoadingSK.set(false);
