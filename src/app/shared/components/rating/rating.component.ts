@@ -14,9 +14,13 @@ export class RatingComponent  {
    *
    */
   ratingValue = signal<number>(0);
+  propertyLabel = signal<string>('');
 
   @Input() set setRatingValue(currentValue: number) {
     this.ratingValue.set(currentValue);
+  }
+  @Input() set setPropertyLabelValue(currentValue: string) {
+    this.propertyLabel.set(currentValue);
   }
   constructor() { }
 

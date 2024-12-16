@@ -32,7 +32,10 @@
           </ion-col>
           <ion-col class="info-item">
             <h3 class="item-title">Inteligencia</h3>
-            <app-rating [setRatingValue]="cat().intelligence"></app-rating>
+            <app-rating
+              [setPropertyLabelValue]="'intelligence'"
+              [setRatingValue]="cat().intelligence">
+            </app-rating>
           </ion-col>
         </ion-row>
 
@@ -45,7 +48,10 @@
         <ion-row class="item-container">
           <ion-col class="info-item">
             <h3 class="item-title">Adaptación</h3>
-            <app-rating [setRatingValue]="cat().adaptability"></app-rating>
+            <app-rating
+              [setPropertyLabelValue]="'adaptability'"
+              [setRatingValue]="cat().adaptability">
+            </app-rating>
           </ion-col>
           <ion-col class="info-item">
             <h3 class="item-title">Expectativa de vida</h3>
@@ -62,11 +68,17 @@
         <ion-row class="item-container">
           <ion-col class="info-item">
             <h3 class="item-title">Amistad con perros</h3>
-            <app-rating [setRatingValue]="cat().dog_friendly"></app-rating>
+            <app-rating
+              [setPropertyLabelValue]="'dog_friendly'"
+              [setRatingValue]="cat().dog_friendly">
+            </app-rating>
           </ion-col>
           <ion-col class="info-item">
             <h3 class="item-title">Necesidades sociales</h3>
-            <app-rating [setRatingValue]="cat().social_needs"></app-rating>
+            <app-rating
+              [setPropertyLabelValue]="'social_needs'"
+              [setRatingValue]="cat().social_needs">
+            </app-rating>
           </ion-col>
         </ion-row>
 
@@ -83,7 +95,10 @@
           </ion-col>
           <ion-col class="info-item">
             <h3 class="item-title">Nivel de energía</h3>
-            <app-rating [setRatingValue]="cat().energy_level"></app-rating>
+            <app-rating
+              [setPropertyLabelValue]="'energy_level'"
+              [setRatingValue]="cat().energy_level">
+            </app-rating>
           </ion-col>
         </ion-row>
 
