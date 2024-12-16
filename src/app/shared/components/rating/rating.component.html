@@ -1,0 +1,6 @@
+<div class="rating-container">
+  <ng-container *ngFor="let bullet of [1,2,3,4,5]">
+    <ion-icon [name]="bullet <= ratingValue() ? 'ellipse' : 'ellipse-outline'" [ngStyle]="{'font-size': '1rem'}">
+    </ion-icon>
+  </ng-container>
+</div>

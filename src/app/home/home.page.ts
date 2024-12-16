@@ -58,7 +58,7 @@ export class HomePage implements OnInit, OnDestroy {
    *  function for get initial cat list data and set in catList
    */
   getInitialCatList(event?: any): void {
-    this.catService.getCatListV2(this.currentCatPage).subscribe((response: Cat[]) => {
+    this.catService.getCatList(this.currentCatPage).subscribe((response: Cat[]) => {
       if (response.length > 0) {
         this.currentCatPage ++;
         this.catList.update(currentData => [...currentData, ...response]);
@@ -102,6 +102,11 @@ export class HomePage implements OnInit, OnDestroy {
        */
       const filter = this.catList().filter((cat) => cat.name.toLowerCase().indexOf(event) > -1);
       this.catList.set(filter);
+      if (this.catList().length === 0) {
+        /**
+         * procedemos a buscar en base de datos
+         */
+      }
       console.log('filter: ', filter);
     }
   }

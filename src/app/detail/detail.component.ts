@@ -7,13 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { HomePage } from '../home/home.page';
 import { ExternalLinkService } from '../shared/services/external-link.service';
 import { CommonModule } from '@angular/common';
+import { RatingComponent } from '../shared/components/rating/rating.component';
 
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule]
+  imports: [IonicModule, CommonModule, RatingComponent]
 })
 export class DetailComponent  implements OnInit, OnDestroy {
   cat = signal<Cat>({

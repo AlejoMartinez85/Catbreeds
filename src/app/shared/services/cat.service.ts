@@ -98,24 +98,7 @@ export class CatService {
    * service for get all cat list
    * @returns
    */
-  getCatList(): Observable<Cat[] | any> {
-    const endpoint: string = 'breeds';
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'x-api-key': this.apiKey
-    });
-    return this.http.get(`${this.url}/${endpoint}`, {headers}).pipe(
-      catchError((error: any) => {
-        console.log('error in get cat list', error);
-        return of([]);
-      })
-    );
-  }
-  /**
-   * service for get all cat list
-   * @returns
-   */
-  getCatListV2(currentPage: number = 0): Observable<Cat[] | any> {
+  getCatList(currentPage: number = 0): Observable<Cat[] | any> {
     const endpoint: string = 'breeds';
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
