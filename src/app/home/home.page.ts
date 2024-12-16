@@ -95,35 +95,48 @@ export class HomePage implements OnInit, OnDestroy {
    *
    * @param event
    */
-  onIonInfinite(event: any): void {
-    if (this.hasMoreData) {
-      this.getInitialCatList(event);
-    } else {
-      event.target.complete();
-    }
-  }
-
   searchQuery(event: any): void {
-    this.isLoadingSK.set(true);
-    console.log('event in home component: ', event);
     if (event === '') {
       /**
        * cuando es vacio eso quiere decir que debemos de traer todo de nuevo
        */
       this.catList.set(this.catListBakcup());
+      if (this.currentCatPage > 0) {
+        this.hasMoreData = true;
+      }
     } else {
       /**
        * vamos a filtrar con lo que trajo haber que se encuentra
        */
-      const filter = this.catList().filter((cat) => cat.name.toLowerCase().indexOf(event) > -1);
-      this.catList.set(filter);
+      this.catList.set(this.returnValueFiltered(event));
+      this.hasMoreData = false;
       if (this.catList().length === 0) {
+        this.isLoadingSK.set(true);
         /**
-         * procedemos a buscar en base de datos
+         * cuando no encontramos en el local
+         * vamos a consultar toda el api y buscar de manera local, sino los tiene
+         * almacenados ahí entonces mostramos el feedback de not found
          */
+        console.log('event cuando no lo encuentra en el local: ', event);
+        this.catService.getAllCatList().subscribe((response: Cat[]) => {
+          console.log('all cats: ', response);
+          this.catListBakcup.set(response);
+          /**
+           * vamos a filtrar en toda esta data sí coincide
+           */
+            this.catList.set(this.returnValueFiltered(event));
+          this.isLoadingSK.set(false);
+        })
       }
     }
-    this.isLoadingSK.set(false);
+  }
+  /**
+   *
+   * @param query
+   * @returns
+   */
+  returnValueFiltered(query: string): Cat[] | any[] {
+    return this.catList().filter((cat) => cat.name.toLowerCase().indexOf(query) > -1);
   }
 
   /**
@@ -133,7 +146,6 @@ export class HomePage implements OnInit, OnDestroy {
   handleRefresh(event: any) {
     setTimeout(() => {
       this.isLoadingSK.set(true);
-      // Any calls to load data go here
       this.catService.getCatList(0).subscribe((response:Cat[]) => {
         if (response.length > 0) {
           this.currentCatPage++;
@@ -145,7 +157,17 @@ export class HomePage implements OnInit, OnDestroy {
       })
     }, 1000);
   }
-
+  /**
+   *
+   * @param event
+   */
+  onIonInfinite(event: any): void {
+    if (this.hasMoreData) {
+      this.getInitialCatList(event);
+    } else {
+      event.target.complete();
+    }
+  }
   /**
    * Called on scroll events
    */
