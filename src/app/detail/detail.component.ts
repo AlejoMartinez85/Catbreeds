@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { ExternalLinkService } from '../shared/services/external-link.service';
 import { CommonModule } from '@angular/common';
 import { RatingComponent } from '../shared/components/rating/rating.component';
+import { constants } from '../shared/constants/constants';
 
 @Component({
   selector: 'app-detail',
@@ -64,7 +65,6 @@ export class DetailComponent  implements OnInit, OnDestroy {
     }
   });
   homePath: string = '/home';
-  catUrl: string = '';
   catCountryFlagCode: string = '';
   /**
    * variable for show and hide skeleton screen
@@ -86,7 +86,6 @@ export class DetailComponent  implements OnInit, OnDestroy {
     const getCurrentCatData: Cat = this.catService.getCurrentCat;
     if (getCurrentCatData.id !== '') {
       this.cat.set(getCurrentCatData);
-      this.catUrl = this.cat().image.url;
       this.setCurrentCatOriginFlag(this.cat().country_code);
       this.isLoadingSK.set(false);
     } else {
@@ -105,7 +104,6 @@ export class DetailComponent  implements OnInit, OnDestroy {
   getCatById(catId: string): void {
     this.catService.getCatListById(catId).subscribe((response: CatById[]) => {
       this.cat.set(response[0].breeds[0]);
-      this.catUrl = response[0].url;
       this.setCurrentCatOriginFlag(this.cat().country_code);
       this.isLoadingSK.set(false);
     })
@@ -131,10 +129,17 @@ export class DetailComponent  implements OnInit, OnDestroy {
   handleRefresh(event: any) {
     setTimeout(() => {
       this.isLoadingSK.set(true);
-      // Any calls to load data go here
       this.getCatById(this.cat().id);
       event.target.complete();
     }, 1000);
+  }
+
+  /**
+   *
+   * @returns
+   */
+  getImageSrc() {
+    return this.cat()?.image?.url || constants.imageDefautl;
   }
 
   ngOnDestroy(): void {

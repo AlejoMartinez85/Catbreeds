@@ -2,7 +2,7 @@ import { Component, effect, Input, OnInit, signal } from '@angular/core';
 import { Cat } from '../../interfaces/cat.interface';
 import { CatService } from '../../services/cat.service';
 import { Router } from '@angular/router';
-import { BASES_ROUTE } from '../../constants/constants';
+import { BASES_ROUTE, constants } from '../../constants/constants';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 
@@ -50,6 +50,13 @@ export class CatCardComponent {
      * navigate logic
      */
     this.router.navigate([`${BASES_ROUTE.DETAIL}`, cat.id]);
+  }
+  /**
+   *
+   * @returns
+   */
+  getImageSrc() {
+    return this.cat()?.image?.url || constants.imageDefautl;
   }
 
 
