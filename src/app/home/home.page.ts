@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
-import { CatService } from '../shared/services/cat.service';
-import { Cat, CurrentCatListData } from '../shared/interfaces/cat.interface';
+import { CatService } from '../../shared/services/cat.service';
+import { Cat, CurrentCatListData } from '../../shared/interfaces/cat.interface';
 import { IonContent, IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CatCardComponent } from '../shared/components/cat-card/cat-card.component';
-import { InputSearchComponent } from '../shared/components/input-search/input-search.component';
+import { CatCardComponent } from '../../shared/components/cat-card/cat-card.component';
+import { InputSearchComponent } from '../../shared/components/input-search/input-search.component';
 
 @Component({
   selector: 'app-home',

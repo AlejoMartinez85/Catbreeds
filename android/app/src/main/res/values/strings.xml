@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">CatBreeds</string>
+    <string name="title_activity_main">CatBreeds</string>
+    <string name="package_name">com.myapp.catbreeds</string>
+    <string name="custom_url_scheme">com.myapp.catbreeds</string>
+</resources>

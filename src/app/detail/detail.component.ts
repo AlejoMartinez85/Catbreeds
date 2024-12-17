@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
-import { CatService } from '../shared/services/cat.service';
-import { Cat, CatById } from '../shared/interfaces/cat.interface';
+import { CatService } from '../../shared/services/cat.service';
+import { Cat, CatById } from '../../shared/interfaces/cat.interface';
 import { ActivatedRoute } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { ExternalLinkService } from '../shared/services/external-link.service';
+import { ExternalLinkService } from '../../shared/services/external-link.service';
 import { CommonModule } from '@angular/common';
-import { RatingComponent } from '../shared/components/rating/rating.component';
-import { constants } from '../shared/constants/constants';
+import { RatingComponent } from '../../shared/components/rating/rating.component';
+import { constants } from '../../shared/constants/constants';
 
 @Component({
   selector: 'app-detail',
@@ -69,6 +69,9 @@ export class DetailComponent  implements OnInit, OnDestroy {
   });
   homePath: string = '/home';
   catCountryFlagCode: string = '';
+  catUrl: string = '';
+  hasError: boolean = false;
+  isToastOpen: boolean = false;
   /**
    * variable for show and hide skeleton screen
    */
@@ -83,6 +86,13 @@ export class DetailComponent  implements OnInit, OnDestroy {
     this.validateExistingData();
   }
   /**
+   * function to open or close the feedback toast for errors
+   * @param isOpen
+   */
+  setOpen(isOpen: boolean) {
+    this.isToastOpen = isOpen;
+  }
+  /**
    * Function to validate if previously stored
    * information exists or if it is necessary
    * to consult it
@@ -91,11 +101,11 @@ export class DetailComponent  implements OnInit, OnDestroy {
     const getCurrentCatData: Cat = this.catService.getCurrentCat;
     if (getCurrentCatData.id !== '') {
       this.cat.set(getCurrentCatData);
+      this.catUrl = this.cat().image.url;
       this.setCurrentCatOriginFlag(this.cat().country_code);
       this.isLoadingSK.set(false);
     } else {
       this.route.params.subscribe((response: any) => {
-        console.log('response: ', response);
         if (response.id) {
           this.getCatById(response.id);
         }
@@ -108,10 +118,21 @@ export class DetailComponent  implements OnInit, OnDestroy {
    * @param catId
    */
   getCatById(catId: string): void {
-    this.catService.getCatListById(catId).subscribe((response: CatById[]) => {
-      this.cat.set(response[0].breeds[0]);
-      this.setCurrentCatOriginFlag(this.cat().country_code);
-      this.isLoadingSK.set(false);
+    this.catService.getCatListById(catId).subscribe({
+      next: (response: CatById[]) => {
+        if (response[0].breeds.length > 0) {
+          this.cat.set(response[0].breeds[0]);
+          this.catUrl = response[0].url;
+          this.setCurrentCatOriginFlag(this.cat().country_code);
+          this.isLoadingSK.set(false);
+        }
+      },
+      error:(error: any) => {
+        console.log('@ErrorGetCatByID: ', error);
+        this.hasError = true;
+        this.setOpen(true)
+        this.isLoadingSK.set(false);
+      }
     })
   }
   /**
@@ -152,7 +173,7 @@ export class DetailComponent  implements OnInit, OnDestroy {
    * @returns
    */
   getImageSrc() {
-    return this.cat()?.image?.url || constants.imageDefautl;
+    return this.catUrl || constants.imageDefautl;
   }
 
   ngOnDestroy(): void {
