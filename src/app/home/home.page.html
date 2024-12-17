@@ -50,13 +50,13 @@
           La raza que intentas buscar no se encuentra disponble, por favor intenta con otra!
         </ion-card-content>
       </ion-card>
-      <ion-toast
-        [isOpen]="isToastOpen"
-        message="Ha sucedido un error al momento de traer la información"
-        [duration]="5000"
-        (didDismiss)="setOpen(false)">
-      </ion-toast>
     }
+    <ion-toast
+      [isOpen]="isToastOpen"
+      message="Ha sucedido un error al momento de traer la información"
+      [duration]="5000"
+      (didDismiss)="setOpen(false)">
+    </ion-toast>
   } @else {
     <!-- skeleton screen layout -->
      @for(card of skeletonList(); track card; let idx = $index) {

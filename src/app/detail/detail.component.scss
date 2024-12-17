@@ -58,5 +58,15 @@
   margin: 0;
 }
 
+.feedback-container {
+  padding: 1rem;
+
+  .icon-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 
 

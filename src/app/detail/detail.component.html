@@ -9,155 +9,164 @@
   </ion-header>
   <!-- content for all cat information -->
   <ion-content>
-    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
-      <ion-refresher-content></ion-refresher-content>
-    </ion-refresher>
-    <!-- content for main cat image -->
-    <div class="cat-detail-container">
-      <div class="cat-image-container">
-        <img [src]="getImageSrc()" class="cat-image">
-      </div>
-      <!-- scrollable content for secondary cat information -->
-      <div class="scrollable-content">
-        <ion-grid>
-          <!-- Sección de Origen e Inteligencia -->
-          <ion-row>
-            <ion-col size="12">
-              <h2 class="section-title">Información Básica</h2>
-            </ion-col>
-          </ion-row>
-          <ion-row class="item-container">
-            <ion-col class="info-item">
-              <h3 class="item-title">País de origen</h3>
-              <div class="country-data-container">
-                <span>{{cat().origin}}</span>
-                <span [class]="catCountryFlagCode"></span>
-              </div>
-            </ion-col>
-            <ion-col class="info-item">
-              <h3 class="item-title">Inteligencia</h3>
-              <app-rating
-                [setPropertyLabelValue]="'intelligence'"
-                [setRatingValue]="cat().intelligence">
-              </app-rating>
-            </ion-col>
-          </ion-row>
+    @if(!hasError) {
+      <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
+      <!-- content for main cat image -->
+      <div class="cat-detail-container">
+        <div class="cat-image-container">
+          <img [src]="getImageSrc()" class="cat-image">
+        </div>
+        <!-- scrollable content for secondary cat information -->
+        <div class="scrollable-content">
+          <ion-grid>
+            <!-- Sección de Origen e Inteligencia -->
+            <ion-row>
+              <ion-col size="12">
+                <h2 class="section-title">Información Básica</h2>
+              </ion-col>
+            </ion-row>
+            <ion-row class="item-container">
+              <ion-col class="info-item">
+                <h3 class="item-title">País de origen</h3>
+                <div class="country-data-container">
+                  <span>{{cat().origin}}</span>
+                  <span [class]="catCountryFlagCode"></span>
+                </div>
+              </ion-col>
+              <ion-col class="info-item">
+                <h3 class="item-title">Inteligencia</h3>
+                <app-rating [setPropertyLabelValue]="'intelligence'" [setRatingValue]="cat().intelligence">
+                </app-rating>
+              </ion-col>
+            </ion-row>
 
-          <!-- Sección de Adaptabilidad y Vida -->
-          <ion-row>
-            <ion-col size="12">
-              <h2 class="section-title">Características de Vida</h2>
-            </ion-col>
-          </ion-row>
-          <ion-row class="item-container">
-            <ion-col class="info-item">
-              <h3 class="item-title">Adaptación</h3>
-              <app-rating
-                [setPropertyLabelValue]="'adaptability'"
-                [setRatingValue]="cat().adaptability">
-              </app-rating>
-            </ion-col>
-            <ion-col class="info-item">
-              <h3 class="item-title">Expectativa de vida</h3>
-              <span>{{cat().life_span}} años</span>
-            </ion-col>
-          </ion-row>
+            <!-- Sección de Adaptabilidad y Vida -->
+            <ion-row>
+              <ion-col size="12">
+                <h2 class="section-title">Características de Vida</h2>
+              </ion-col>
+            </ion-row>
+            <ion-row class="item-container">
+              <ion-col class="info-item">
+                <h3 class="item-title">Adaptación</h3>
+                <app-rating [setPropertyLabelValue]="'adaptability'" [setRatingValue]="cat().adaptability">
+                </app-rating>
+              </ion-col>
+              <ion-col class="info-item">
+                <h3 class="item-title">Expectativa de vida</h3>
+                <span>{{cat().life_span}} años</span>
+              </ion-col>
+            </ion-row>
 
-          <!-- Sección de Interacción Social -->
-          <ion-row>
-            <ion-col size="12">
-              <h2 class="section-title">Interacción Social</h2>
-            </ion-col>
-          </ion-row>
-          <ion-row class="item-container">
-            <ion-col class="info-item">
-              <h3 class="item-title">Amistad con perros</h3>
-              <app-rating
-                [setPropertyLabelValue]="'dog_friendly'"
-                [setRatingValue]="cat().dog_friendly">
-              </app-rating>
-            </ion-col>
-            <ion-col class="info-item">
-              <h3 class="item-title">Necesidades sociales</h3>
-              <app-rating
-                [setPropertyLabelValue]="'social_needs'"
-                [setRatingValue]="cat().social_needs">
-              </app-rating>
-            </ion-col>
-          </ion-row>
+            <!-- Sección de Interacción Social -->
+            <ion-row>
+              <ion-col size="12">
+                <h2 class="section-title">Interacción Social</h2>
+              </ion-col>
+            </ion-row>
+            <ion-row class="item-container">
+              <ion-col class="info-item">
+                <h3 class="item-title">Amistad con perros</h3>
+                <app-rating [setPropertyLabelValue]="'dog_friendly'" [setRatingValue]="cat().dog_friendly">
+                </app-rating>
+              </ion-col>
+              <ion-col class="info-item">
+                <h3 class="item-title">Necesidades sociales</h3>
+                <app-rating [setPropertyLabelValue]="'social_needs'" [setRatingValue]="cat().social_needs">
+                </app-rating>
+              </ion-col>
+            </ion-row>
 
-          <!-- Sección de Temperamento y Energía -->
-          <ion-row>
-            <ion-col size="12">
-              <h2 class="section-title">Temperamento y Energía</h2>
-            </ion-col>
-          </ion-row>
-          <ion-row class="item-container">
-            <ion-col class="info-item">
-              <h3 class="item-title">Temperamento</h3>
-              <span>{{cat().temperament}}</span>
-            </ion-col>
-            <ion-col class="info-item">
-              <h3 class="item-title">Nivel de energía</h3>
-              <app-rating
-                [setPropertyLabelValue]="'energy_level'"
-                [setRatingValue]="cat().energy_level">
-              </app-rating>
-            </ion-col>
-          </ion-row>
+            <!-- Sección de Temperamento y Energía -->
+            <ion-row>
+              <ion-col size="12">
+                <h2 class="section-title">Temperamento y Energía</h2>
+              </ion-col>
+            </ion-row>
+            <ion-row class="item-container">
+              <ion-col class="info-item">
+                <h3 class="item-title">Temperamento</h3>
+                <span>{{cat().temperament}}</span>
+              </ion-col>
+              <ion-col class="info-item">
+                <h3 class="item-title">Nivel de energía</h3>
+                <app-rating [setPropertyLabelValue]="'energy_level'" [setRatingValue]="cat().energy_level">
+                </app-rating>
+              </ion-col>
+            </ion-row>
 
-          <!-- Sección de Peso -->
-          <ion-row>
-            <ion-col size="12">
-              <h2 class="section-title">Características Físicas</h2>
-            </ion-col>
-          </ion-row>
-          <ion-row class="item-container">
-            <ion-col class="info-item">
-              <h3 class="item-title">Peso</h3>
-              <span>{{cat().weight.metric}} Kg</span>
-            </ion-col>
-            <ion-col class="info-item">
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col size="12">
-              <h2 class="section-title">Información adicional acerca la raza</h2>
-            </ion-col>
-          </ion-row>
-          <ion-row class="item-container">
-            <ion-col class="info-item">
-              <h3 class="item-title">VetStree</h3>
-              <ion-button color="primary" size="small" fill="outline"
-                (click)="openExternalLink(cat().vetstreet_url)">
+            <!-- Sección de Peso -->
+            <ion-row>
+              <ion-col size="12">
+                <h2 class="section-title">Características Físicas</h2>
+              </ion-col>
+            </ion-row>
+            <ion-row class="item-container">
+              <ion-col class="info-item">
+                <h3 class="item-title">Peso</h3>
+                <span>{{cat().weight.metric}} Kg</span>
+              </ion-col>
+              <ion-col class="info-item">
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12">
+                <h2 class="section-title">Información adicional acerca la raza</h2>
+              </ion-col>
+            </ion-row>
+            <ion-row class="item-container">
+              <ion-col class="info-item">
+                <h3 class="item-title">VetStree</h3>
+                <ion-button color="primary" size="small" fill="outline" (click)="openExternalLink(cat().vetstreet_url)">
                   Abrir Enlace
                   <ion-icon slot="end" name="open-outline"></ion-icon>
-              </ion-button>
-            </ion-col>
-            <ion-col class="info-item">
-              <h3 class="item-title">Vca animal hospital</h3>
-              <ion-button color="primary" size="small" fill="outline"
-                (click)="openExternalLink(cat().vcahospitals_url)">
+                </ion-button>
+              </ion-col>
+              <ion-col class="info-item">
+                <h3 class="item-title">Vca animal hospital</h3>
+                <ion-button color="primary" size="small" fill="outline" (click)="openExternalLink(cat().vcahospitals_url)">
                   Abrir Enlace
                   <ion-icon slot="end" name="open-outline"></ion-icon>
-              </ion-button>
-            </ion-col>
-          </ion-row>
+                </ion-button>
+              </ion-col>
+            </ion-row>
 
-          <!-- Sección de Descripción -->
-          <ion-row>
-            <ion-col size="12">
-              <h2 class="section-title">Descripción</h2>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col class="info-item">
-              <span>{{cat().description}}</span>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+            <!-- Sección de Descripción -->
+            <ion-row>
+              <ion-col size="12">
+                <h2 class="section-title">Descripción</h2>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col class="info-item">
+                <span>{{cat().description}}</span>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
       </div>
-    </div>
+    } @else {
+      <ion-card class="feedback-container" color="light">
+        <div class="icon-content">
+          <ion-icon size="large" name="warning-outline"></ion-icon>
+        </div>
+        <ion-card-header>
+          <ion-card-title>Ups..</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          Ha ocurrido un error, por favor intenta más tarde
+        </ion-card-content>
+      </ion-card>
+      <ion-toast
+        [isOpen]="isToastOpen"
+        message="Ha sucedido un error al momento de traer la información"
+        [duration]="5000"
+        (didDismiss)="setOpen(false)">
+      </ion-toast>
+    }
+
   </ion-content>
 } @else {
   <ion-header>
