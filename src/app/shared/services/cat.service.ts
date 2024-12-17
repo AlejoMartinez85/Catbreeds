@@ -1,6 +1,6 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable, of, retry, throwError } from 'rxjs';
 import { constants } from '../constants/constants';
 import { Cat, CurrentCatListData } from '../interfaces/cat.interface';
 
@@ -94,8 +94,31 @@ export class CatService {
    * @param http
    */
   constructor(private http: HttpClient) { }
+
   /**
-   * service for get all cat list
+   * service that allows a better error handling to be
+   * carried out and then returned to the view
+   * @param error
+   * @returns
+   */
+  private handleHttpError(error: HttpErrorResponse) {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      /**
+       * Client side error
+       */
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      /**
+       * Server side error
+       */
+      errorMessage = `Código de error: ${error.status}\nMensaje: ${error.message}`;
+    }
+
+    return throwError(() => new Error(errorMessage));
+  }
+  /**
+   * Service that returns the list of paged cats
    * @returns
    */
   getCatList(currentPage: number = 0): Observable<Cat[] | any> {
@@ -109,15 +132,14 @@ export class CatService {
       headers,
       params
     }
-    return this.http.get(`${this.url}/${endpoint}`, options).pipe(
-      catchError((error: any) => {
-        console.log('error in get cat list', error);
-        return of([]);
-      })
-    );
+    return this.http.get(`${this.url}/${endpoint}`, options)
+      .pipe(
+        retry(2),
+        catchError(this.handleHttpError)
+      );
   }
   /**
-   *
+   *  Service returning the entire list of cats
    * @returns
    */
   getAllCatList(): Observable<Cat[] | any> {
@@ -126,15 +148,13 @@ export class CatService {
       'Content-Type': 'application/json',
       'x-api-key': this.apiKey
     });
-    return this.http.get(`${this.url}/${endpoint}`, {headers}).pipe(
-      catchError((error: any) => {
-        console.log('error in get cat list', error);
-        return of([]);
-      })
+    return this.http.get(`${this.url}/${endpoint}`, { headers }).pipe(
+      retry(2),
+      catchError(this.handleHttpError)
     );
   }
   /**
-   *  service for get a selected cat by id
+   *  Service that returns the selected cat via the ID
    * @param id
    * @returns
    */
@@ -145,11 +165,9 @@ export class CatService {
       'x-api-key': this.apiKey
     });
     return this.http.get(`${this.url}/${endPoint}`, { headers }).pipe(
-      catchError((error: any) => {
-        console.log('error in get cat list', error);
-        return of([]);
-      })
-    )
+      retry(2),
+      catchError(this.handleHttpError)
+    );
 
   }
   /**

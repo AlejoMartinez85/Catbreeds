@@ -11,11 +11,13 @@ import { IonicModule } from '@ionic/angular';
 })
 export class RatingComponent  {
   /**
-   *
+   * signal variables
    */
   ratingValue = signal<number>(0);
   propertyLabel = signal<string>('');
-
+  /**
+   * Inputs functions
+   */
   @Input() set setRatingValue(currentValue: number) {
     this.ratingValue.set(currentValue);
   }

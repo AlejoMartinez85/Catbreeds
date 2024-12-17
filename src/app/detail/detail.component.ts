@@ -16,6 +16,9 @@ import { constants } from '../shared/constants/constants';
   imports: [IonicModule, CommonModule, RatingComponent]
 })
 export class DetailComponent  implements OnInit, OnDestroy {
+  /**
+   * cat variable
+   */
   cat = signal<Cat>({
     weight: {
       imperial: '',
@@ -80,7 +83,9 @@ export class DetailComponent  implements OnInit, OnDestroy {
     this.validateExistingData();
   }
   /**
-   *
+   * Function to validate if previously stored
+   * information exists or if it is necessary
+   * to consult it
    */
   validateExistingData(): void {
     const getCurrentCatData: Cat = this.catService.getCurrentCat;
@@ -98,7 +103,8 @@ export class DetailComponent  implements OnInit, OnDestroy {
     }
   }
   /**
-   *
+   * Function to query the information of
+   * the current cat with the id.
    * @param catId
    */
   getCatById(catId: string): void {
@@ -109,21 +115,27 @@ export class DetailComponent  implements OnInit, OnDestroy {
     })
   }
   /**
-   *
+   * function that concatenates the
+   * countryCode property of the selected
+   * cat to be able to return the flag class
+   * corresponding to the country
    * @param countryCode
    */
   setCurrentCatOriginFlag(countryCode: string): void {
     this.catCountryFlagCode = `fi fi-${countryCode.toLowerCase()}`;
   }
   /**
-   *
+   * Function for centralizing and
+   * calling the external link service
    * @param link
    */
   openExternalLink(link:string): void {
     this.externalLinkService.openExternalLink(link);
   }
   /**
-   *
+   *  Function that allows the consultation
+   *  of the cat's information when emulating a
+   *  refresh
    * @param event
    */
   handleRefresh(event: any) {
@@ -135,7 +147,8 @@ export class DetailComponent  implements OnInit, OnDestroy {
   }
 
   /**
-   *
+   *  function that validates and returns the
+   *  corresponding value to be displayed in the cat's image
    * @returns
    */
   getImageSrc() {

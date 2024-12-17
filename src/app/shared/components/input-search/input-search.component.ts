@@ -16,12 +16,12 @@ export class InputSearchComponent {
   @Output() search = new EventEmitter<string>();
   constructor() { }
   /**
-   *
+   * Function that allows me to obtain
+   * the value entered in input
    * @param event
    */
   handleInput(event: any): void {
     const query = event.target.value.toLowerCase();
-    console.log('query: ', query);
     this.search.emit(query);
   }
 

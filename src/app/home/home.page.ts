@@ -41,6 +41,8 @@ export class HomePage implements OnInit, OnDestroy {
    */
   isLoadingSK = signal<boolean>(true);
   skeletonList = signal<any[]>([{}, {}]);
+  isToastOpen: boolean = false;
+
 
   @ViewChild(IonContent, { static: true }) mainContent: IonContent | undefined
   /**
@@ -55,7 +57,16 @@ export class HomePage implements OnInit, OnDestroy {
     this.validateExistingData();
   }
   /**
-   *
+   * function to open or close the feedback toast for errors
+   * @param isOpen
+   */
+  setOpen(isOpen: boolean) {
+    this.isToastOpen = isOpen;
+  }
+  /**
+   * Function to validate when the component is
+   * loaded if local data is available or if it is
+   * necessary to consume the API.
    */
   validateExistingData(): void {
     const currentCatList: CurrentCatListData = this.catService.listCat;
@@ -69,33 +80,45 @@ export class HomePage implements OnInit, OnDestroy {
     }
   }
   /**
-   *  function for get initial cat list data and set in catList
+   * Function used to query the cat API progressively
+   * with the currentPage parameter.
+   *
+    It is also used to update the infinite scroll event.
+   * @param event
    */
   getInitialCatList(event?: any): void {
-    this.catService.getCatList(this.currentCatPage).subscribe((response: Cat[]) => {
-      if (response.length > 0) {
-        this.currentCatPage ++;
-        this.catList.update(currentData => [...currentData, ...response]);
-        this.catListBakcup.set(this.catList());
-        console.log('catList data: ', this.catList());
-        console.log('this.currentCatPage: ', this.currentCatPage);
-      } else {
-        this.hasMoreData = false;
+    this.catService.getCatList(this.currentCatPage).subscribe({
+      next: (response: Cat[]) => {
+        if (response.length > 0) {
+          this.currentCatPage++;
+          this.catList.update(currentData => [...currentData, ...response]);
+          this.catListBakcup.set(this.catList());
+        } else {
+          this.hasMoreData = false;
+        }
+        /**
+         * for manage the current infinite scroll state
+        */
+        if (event) {
+          event.target.complete();
+        }
+      },
+      error: (error: any) => {
+        console.log('@ErrroGetCatList: ', error);
+        this.setOpen(true);
+      },
+      complete: () => {
+        this.isLoadingSK.set(false);
       }
-      /**
-       * for manage the current infinite scroll state
-      */
-     if (event) {
-       event.target.complete();
-      }
-      this.isLoadingSK.set(false);
     });
   }
   /**
-   *
+   *  Function that serves as receiver of the output
+   *  event of the component searchinput and obtains
+   * the value to search.
    * @param event
    */
-  searchQuery(event: any): void {
+  searchQuery(event: string): void {
     if (event === '') {
       /**
        * cuando es vacio eso quiere decir que debemos de traer todo de nuevo
@@ -113,52 +136,70 @@ export class HomePage implements OnInit, OnDestroy {
       if (this.catList().length === 0) {
         this.isLoadingSK.set(true);
         /**
-         * cuando no encontramos en el local
-         * vamos a consultar toda el api y buscar de manera local, sino los tiene
-         * almacenados ahí entonces mostramos el feedback de not found
-         */
-        console.log('event cuando no lo encuentra en el local: ', event);
-        this.catService.getAllCatList().subscribe((response: Cat[]) => {
-          console.log('all cats: ', response);
-          this.catListBakcup.set(response);
-          /**
-           * vamos a filtrar en toda esta data sí coincide
-           */
-            this.catList.set(this.returnValueFiltered(event));
-          this.isLoadingSK.set(false);
-        })
+        * when we don't find them in the local
+        * we are going to consult all the api and search locally, if it doesn't have them
+        * stored there then we show the feedback of not found
+        */
+        this.catService.getAllCatList().subscribe({
+          next: (response: Cat[]) => {
+            if (response.length) {
+              this.catListBakcup.set(response);
+              this.catList.set(this.returnValueFiltered(event));
+            }
+          },
+          error: (error: any) => {
+            console.log('@ErrroGetAllCatList: ', error);
+            this.setOpen(true);
+          },
+          complete: () => {
+            this.isLoadingSK.set(false);
+          }
+        });
       }
     }
   }
   /**
-   *
+   *  Function that centralizes the action of
+   *  filtering on the current list of cats by means
+   *  of the property name vs. what was typed in the search input
    * @param query
    * @returns
    */
   returnValueFiltered(query: string): Cat[] | any[] {
     return this.catList().filter((cat) => cat.name.toLowerCase().indexOf(query) > -1);
   }
-
   /**
-   *
+   *  Function that emulates the native refresh
+   *  event and allows loading information without
+   *  reloading the app.
    * @param event
    */
   handleRefresh(event: any) {
     setTimeout(() => {
       this.isLoadingSK.set(true);
-      this.catService.getCatList(0).subscribe((response:Cat[]) => {
-        if (response.length > 0) {
-          this.currentCatPage++;
-          this.catList.set(response);
-          this.catListBakcup.set(this.catList());
+      this.catService.getCatList(0).subscribe({
+        next: (response: Cat[]) => {
+          if (response.length > 0) {
+            this.currentCatPage++;
+            this.catList.set(response);
+            this.catListBakcup.set(this.catList());
+          }
+          this.isLoadingSK.set(false);
+          event.target.complete();
+        },
+        error: (error: any) => {
+          console.log('@ErrroGetCatList handleRefresh: ', error);
+          this.setOpen(true);
+        },
+        complete: () => {
+          this.isLoadingSK.set(false);
+          event.target.complete();
         }
-        this.isLoadingSK.set(false);
-        event.target.complete();
       })
     }, 1000);
   }
   /**
-   *
+   * Function that captures the event of infinitescroll
    * @param event
    */
   onIonInfinite(event: any): void {
@@ -169,7 +210,10 @@ export class HomePage implements OnInit, OnDestroy {
     }
   }
   /**
-   * Called on scroll events
+   * Function that allows me to capture the events
+   * triggered in the main component in order to know
+   * when the scrollup button should be displayed.
+   * @param event
    */
   async onScroll(event: any): Promise<void> {
     /**
@@ -194,7 +238,10 @@ export class HomePage implements OnInit, OnDestroy {
     const scrollPercentage = (currentScroll / (totalHeight - viewportHeight)) * 100;
     this.showScrollButton = scrollPercentage >= 70;
   }
-
+  /**
+   * Function to scroll up to the
+   * beginning of the container
+   */
   scrollUp(): void {
     this.mainContent?.scrollToTop(400);
   }
