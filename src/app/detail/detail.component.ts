@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { ExternalLinkService } from '../shared/services/external-link.service';
 import { CommonModule } from '@angular/common';
 import { RatingComponent } from '../shared/components/rating/rating.component';
+import { constants } from '../shared/constants/constants';
 
 @Component({
   selector: 'app-detail',
@@ -15,6 +16,9 @@ import { RatingComponent } from '../shared/components/rating/rating.component';
   imports: [IonicModule, CommonModule, RatingComponent]
 })
 export class DetailComponent  implements OnInit, OnDestroy {
+  /**
+   * cat variable
+   */
   cat = signal<Cat>({
     weight: {
       imperial: '',
@@ -64,7 +68,6 @@ export class DetailComponent  implements OnInit, OnDestroy {
     }
   });
   homePath: string = '/home';
-  catUrl: string = '';
   catCountryFlagCode: string = '';
   /**
    * variable for show and hide skeleton screen
@@ -80,13 +83,14 @@ export class DetailComponent  implements OnInit, OnDestroy {
     this.validateExistingData();
   }
   /**
-   *
+   * Function to validate if previously stored
+   * information exists or if it is necessary
+   * to consult it
    */
   validateExistingData(): void {
     const getCurrentCatData: Cat = this.catService.getCurrentCat;
     if (getCurrentCatData.id !== '') {
       this.cat.set(getCurrentCatData);
-      this.catUrl = this.cat().image.url;
       this.setCurrentCatOriginFlag(this.cat().country_code);
       this.isLoadingSK.set(false);
     } else {
@@ -99,42 +103,56 @@ export class DetailComponent  implements OnInit, OnDestroy {
     }
   }
   /**
-   *
+   * Function to query the information of
+   * the current cat with the id.
    * @param catId
    */
   getCatById(catId: string): void {
     this.catService.getCatListById(catId).subscribe((response: CatById[]) => {
       this.cat.set(response[0].breeds[0]);
-      this.catUrl = response[0].url;
       this.setCurrentCatOriginFlag(this.cat().country_code);
       this.isLoadingSK.set(false);
     })
   }
   /**
-   *
+   * function that concatenates the
+   * countryCode property of the selected
+   * cat to be able to return the flag class
+   * corresponding to the country
    * @param countryCode
    */
   setCurrentCatOriginFlag(countryCode: string): void {
     this.catCountryFlagCode = `fi fi-${countryCode.toLowerCase()}`;
   }
   /**
-   *
+   * Function for centralizing and
+   * calling the external link service
    * @param link
    */
   openExternalLink(link:string): void {
     this.externalLinkService.openExternalLink(link);
   }
   /**
-   *
+   *  Function that allows the consultation
+   *  of the cat's information when emulating a
+   *  refresh
    * @param event
    */
   handleRefresh(event: any) {
     setTimeout(() => {
       this.isLoadingSK.set(true);
-      // Any calls to load data go here
       this.getCatById(this.cat().id);
       event.target.complete();
     }, 1000);
+  }
+
+  /**
+   *  function that validates and returns the
+   *  corresponding value to be displayed in the cat's image
+   * @returns
+   */
+  getImageSrc() {
+    return this.cat()?.image?.url || constants.imageDefautl;
   }
 
   ngOnDestroy(): void {

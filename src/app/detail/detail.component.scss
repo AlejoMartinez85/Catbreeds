@@ -11,9 +11,7 @@
 
 .cat-image-container {
   flex-shrink: 0;
-  /* Evita que la imagen se reduzca */
   height: 21.875rem;
-  /* Altura fija */
   overflow: hidden;
 }
 
@@ -27,7 +25,6 @@
 .scrollable-content {
   flex-grow: 1;
   overflow-y: auto;
-  /* Hace scroll solo en este contenedor */
   padding: 1rem;
 }
 
